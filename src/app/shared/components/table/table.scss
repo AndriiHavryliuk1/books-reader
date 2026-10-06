@@ -1,0 +1,107 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.search {
+  flex: 1 1 280px;
+  max-width: 400px;
+}
+
+.container {
+  overflow: auto;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+table {
+  width: 100%;
+}
+
+.actions-cell {
+  width: 1%;
+  text-align: end;
+  white-space: nowrap;
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 16px;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+
+  p {
+    margin: 0;
+    font: var(--mat-sys-body-large);
+  }
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+
+  kbd {
+    padding: 0 4px;
+    border: 1px solid var(--mat-sys-outline-variant);
+    border-radius: 4px;
+    font: inherit;
+  }
+}
+
+.hint-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+
+  // Like mat-sort-header: the arrow is faint on hover and only fully shown when sorted.
+  .sort-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 150ms;
+  }
+
+  &:hover .sort-icon {
+    opacity: 0.4;
+  }
+
+  &.sorted .sort-icon {
+    opacity: 1;
+  }
+}
+
+.sort-order {
+  font: var(--mat-sys-label-small);
+  color: var(--mat-sys-primary);
+}

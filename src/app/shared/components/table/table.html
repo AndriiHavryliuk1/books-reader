@@ -1,0 +1,94 @@
+<div class="toolbar">
+  <mat-form-field class="search" appearance="outline">
+    <mat-icon matPrefix>search</mat-icon>
+    <mat-label>{{ searchLabel() }}</mat-label>
+    <input matInput type="search" [formField]="searchForm.search" />
+    @if (searchForm.search().controlValue()) {
+      <button matIconButton matSuffix type="button" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+  <ng-content select="[tableActions]" />
+</div>
+
+@if (sortable()) {
+  <p class="hint">
+    <mat-icon class="hint-icon">info</mat-icon>
+    Click a column header to sort. Hold <kbd>Ctrl</kbd> and click another header to sort by it next.
+  </p>
+}
+
+<div class="container">
+  <table mat-table [dataSource]="data()" [trackBy]="trackRow">
+    @for (column of columns(); track column.key) {
+      <ng-container [matColumnDef]="column.key">
+        <th mat-header-cell *matHeaderCellDef>
+          @if (column.sortable) {
+            @let sorted = sortedColumns()[column.key];
+            <button
+              type="button"
+              class="sort-button"
+              [class.sorted]="sorted"
+              (click)="onSort(column.key, $event)"
+            >
+              {{ column.header }}
+              <mat-icon class="sort-icon">
+                {{ sorted?.direction === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+              </mat-icon>
+              @if (sorted?.order; as order) {
+                <span class="sort-order">{{ order }}</span>
+              }
+            </button>
+          } @else {
+            {{ column.header }}
+          }
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row | tableCell: column }}
+        </td>
+      </ng-container>
+    }
+
+    <ng-container [matColumnDef]="actionsColumn">
+      <th mat-header-cell *matHeaderCellDef class="actions-cell"></th>
+      <td mat-cell *matCellDef="let row" class="actions-cell">
+        @for (action of rowActions(); track action.id) {
+          <button
+            matIconButton
+            type="button"
+            [matTooltip]="action.label"
+            (click)="rowAction.emit({ id: action.id, row })"
+          >
+            <mat-icon>{{ action.icon }}</mat-icon>
+          </button>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+
+    <tr class="mat-mdc-row" *matNoDataRow>
+      <td class="mat-mdc-cell" [attr.colspan]="displayedColumns().length">
+        <div class="state">
+          @if (state().search) {
+            <p>No results for “{{ state().search }}”</p>
+            <button matButton type="button" (click)="clearSearch()">Clear search</button>
+          } @else {
+            <p>No data yet</p>
+          }
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<mat-paginator
+  [length]="total()"
+  [pageIndex]="state().pageIndex"
+  [pageSize]="state().pageSize"
+  [pageSizeOptions]="pageSizeOptions()"
+  showFirstLastButtons
+  (page)="onPage($event)"
+/>

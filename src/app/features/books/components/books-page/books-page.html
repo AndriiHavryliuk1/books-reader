@@ -1,0 +1,35 @@
+<main class="page">
+  <h1>Library</h1>
+
+  <app-table
+    [columns]="columns"
+    [state]="store.tableState()"
+    (stateChange)="store.setTableState($event)"
+    [data]="store.page()"
+    [total]="store.total()"
+    [rowActions]="rowActions"
+    (rowAction)="onRowAction($event)"
+  >
+    <div tableActions class="actions">
+      <button matButton="filled" type="button" (click)="addBook()">
+        <mat-icon>add</mat-icon>
+        Add book
+      </button>
+      <button matButton="outlined" type="button" (click)="fileInput.click()">
+        <mat-icon>upload_file</mat-icon>
+        Import XML
+      </button>
+      <input
+        #fileInput
+        type="file"
+        accept=".xml,application/xml,text/xml"
+        hidden
+        (change)="onFileSelected(fileInput)"
+      />
+      <button matButton="outlined" type="button" (click)="exportXml()">
+        <mat-icon>download</mat-icon>
+        Export XML
+      </button>
+    </div>
+  </app-table>
+</main>
